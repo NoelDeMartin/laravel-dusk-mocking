@@ -5,7 +5,7 @@ namespace NoelDeMartin\LaravelDusk\Http\Middleware;
 use Closure;
 use NoelDeMartin\LaravelDusk\Facades\Mocking;
 
-class PersistMocking
+class SaveMocking
 {
     /**
      * Handle an incoming request.

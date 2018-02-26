@@ -39,6 +39,10 @@ class MockingServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        if ($this->app->environment('production')) {
+            throw new Exception('It is unsafe to run Dusk in production.');
+        }
+
         $this->app->singleton('dusk-mocking', function ($app) {
             return new MockingManager($app);
         });
