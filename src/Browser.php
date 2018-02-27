@@ -23,4 +23,16 @@ class Browser extends DuskBrowser
 
         return new MockingProxy($this, $facade);
     }
+
+    /**
+     * Alias for mock.
+     *
+     * @param  string   $facade
+     * @param  mixed[]  ...$arguments
+     * @return \NoelDeMartin\LaravelDusk\MockingProxy
+     */
+    public function fake(string $facade, ...$arguments)
+    {
+        return $this->mock($facade, ...$arguments);
+    }
 }
