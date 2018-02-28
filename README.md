@@ -59,7 +59,35 @@ public function testOrderShipping()
 
 Notice how the api is the same as Http tests.
 
-At the moment only the functionality analogous of calling `fake` is available, and not methods mocking. This will be addressed on [this issue](https://github.com/NoelDeMartin/laravel-dusk-mocking/issues/1).
+## Extending
+
+Doing this, only the functionality analogous of calling `fake` is available, and not methods mocking. In order to mock custom facades or modify Laravel's default fakes, the system can be extended by using custom fakes. Those can be registered in two ways:
+
+- Registered globally (every test using fakes will use them). Add the following to your base test case (usually `DuskTestCase`):
+
+```
+public function setUp()
+{
+    parent::setUp();
+
+    // Register fake mocks
+    Mocking::registerFake(Mail::class, MyMailFake::class);
+}
+```
+
+- Another option is to register them only for one browser. This can be useful if it's necessary to have different fakes for multiple browsers or for aesthetic reasons (performance is not affected either way):
+
+```
+$this->browse(function (Browser $browser) {
+    $browser->registerFake(Mail::class, MyMailFake::class);
+
+    $mail = $browser->mock(Mail::class);
+
+    // Proceed with the test
+});
+```
+
+In order to understand how to implement these Fake classes, you can take a look at how [Laravel fakes](https://github.com/laravel/framework/tree/5.6/src/Illuminate/Support/Testing/Fakes) are implemented, since those are the ones used by default. This classes can also be used as a base, extending them and adding any modifications.
 
 # Disclaimer
 

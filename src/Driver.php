@@ -14,13 +14,20 @@ abstract class Driver
     protected $mocks = [];
 
     /**
+     * The array of fake facade classes.
+     *
+     * @var array
+     */
+    protected $fakes = [];
+
+    /**
      * Start mocking facades.
      *
      * @return void
      */
     public function start()
     {
-        $this->loadMocks();
+        $this->load();
 
         foreach ($this->mocks as $facade => $mock) {
             $facade::swap($mock);
@@ -35,7 +42,7 @@ abstract class Driver
      */
     public function save(Response $response)
     {
-        $this->persistMocks($response);
+        $this->persist($response);
     }
 
     /**
@@ -55,6 +62,18 @@ abstract class Driver
     }
 
     /**
+     * Register new facade fake.
+     *
+     * @param  string   $facade
+     * @param  string   $fake
+     * @return void
+     */
+    public function registerFake(string $facade, string $fake)
+    {
+        $this->fakes[$facade] = $fake;
+    }
+
+    /**
      * Determine if a facade is being mocked.
      *
      * @param  string   $facade
@@ -63,6 +82,28 @@ abstract class Driver
     public function has(string $facade)
     {
         return isset($this->mocks[$facade]);
+    }
+
+    /**
+     * Determine if a facade fake is registered.
+     *
+     * @param  string   $facade
+     * @return boolean
+     */
+    public function hasFake(string $facade)
+    {
+        return isset($this->fakes[$facade]);
+    }
+
+    /**
+     * Get registered fake.
+     *
+     * @param  string   $facade
+     * @return string | null
+     */
+    public function getFake(string $facade)
+    {
+        return $this->hasFake($facade)? $this->fakes[$facade] : null;
     }
 
     /**
@@ -96,23 +137,27 @@ abstract class Driver
     */
     protected function createMock(string $facade, ...$arguments)
     {
-        $facade::fake(...$arguments);
+        if (isset($this->fakes[$facade])) {
+            return new $this->fakes[$facade](...$arguments);
+        } else {
+            $facade::fake(...$arguments);
 
-        return $facade::getFacadeRoot();
+            return $facade::getFacadeRoot();
+        }
     }
 
     /**
-     * Load mocks from storage.
+     * Load data from storage.
      *
      * @return void
      */
-    protected abstract function loadMocks();
+    protected abstract function load();
 
     /**
-     * Persists mocks.
+     * Persists data.
      *
      * @param  \Symfony\Component\HttpFoundation\Response   $response
      * @return void
      */
-    protected abstract function persistMocks(Response $response);
+    protected abstract function persist(Response $response);
 }

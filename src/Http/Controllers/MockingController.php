@@ -19,6 +19,18 @@ class MockingController
     }
 
     /**
+     * Register facade fake.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $facade = request('facade');
+        $fake = request('fake');
+        Mocking::registerFake($facade, $fake);
+    }
+
+    /**
      * Retrieve serialized facade mock.
      *
      * @return mixed

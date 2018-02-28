@@ -24,6 +24,11 @@ class MockingServiceProvider extends ServiceProvider
                     'uses' => 'MockingController@mock',
                 ]);
 
+                Route::get('/_dusk-mocking/register', [
+                    'middleware' => 'web',
+                    'uses' => 'MockingController@register',
+                ]);
+
                 Route::get('/_dusk-mocking/serialize', [
                     'middleware' => 'web',
                     'uses' => 'MockingController@serialize',

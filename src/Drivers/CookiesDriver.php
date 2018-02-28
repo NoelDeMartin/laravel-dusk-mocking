@@ -20,14 +20,16 @@ class CookiesDriver extends Driver
      *
      * @return void
      */
-    protected function loadMocks()
+    protected function load()
     {
-        $serializedMocks = Cookie::get(self::COOKIE_NAME, '{}');
-        $serializedMocks = json_decode($serializedMocks, true);
+        $data = Cookie::get(self::COOKIE_NAME, '{"mocks":{},"fakes":{}}');
+        $data = json_decode($data, true);
 
-        foreach ($serializedMocks as $facade => $serializedMock) {
+        foreach ($data['mocks'] as $facade => $serializedMock) {
             $this->mocks[$facade] = $this->unserialize($serializedMock);
         }
+
+        $this->fakes = $data['fakes'];
     }
 
     /**
@@ -36,7 +38,7 @@ class CookiesDriver extends Driver
      * @param  \Symfony\Component\HttpFoundation\Response   $response
      * @return void
      */
-    protected function persistMocks(Response $response)
+    protected function persist(Response $response)
     {
         $serializedMocks = [];
         foreach (array_keys($this->mocks) as $facade) {
@@ -46,7 +48,10 @@ class CookiesDriver extends Driver
         $response->headers->setCookie(
             Cookie::forever(
                 static::COOKIE_NAME,
-                json_encode($serializedMocks),
+                json_encode([
+                    'mocks' => $serializedMocks,
+                    'fakes' => $this->fakes,
+                ]),
                 '/'
             )
         );
