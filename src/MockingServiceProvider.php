@@ -4,7 +4,6 @@ namespace NoelDeMartin\LaravelDusk;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use NoelDeMartin\LaravelDusk\Http\Middleware\SaveMocking;
 use NoelDeMartin\LaravelDusk\Http\Middleware\StartMocking;
 
@@ -53,9 +52,10 @@ class MockingServiceProvider extends ServiceProvider
         });
 
         if (!$this->app->runningInConsole()) {
-            $kernel = $this->app->make(HttpKernel::class);
-            $kernel->pushMiddleware(StartMocking::class);
-            $kernel->pushMiddleware(SaveMocking::class);
+            foreach (Route::getMiddlewareGroups() as $group => $middlewares) {
+                Route::pushMiddlewareToGroup($group, StartMocking::class);
+                Route::pushMiddlewareToGroup($group, SaveMocking::class);
+            }
         }
     }
 }

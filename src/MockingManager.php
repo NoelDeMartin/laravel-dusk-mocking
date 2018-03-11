@@ -3,6 +3,7 @@
 namespace NoelDeMartin\LaravelDusk;
 
 use Illuminate\Support\Manager;
+use NoelDeMartin\LaravelDusk\Drivers\SessionDriver;
 use NoelDeMartin\LaravelDusk\Drivers\CookiesDriver;
 
 class MockingManager extends Manager
@@ -29,5 +30,15 @@ class MockingManager extends Manager
     protected function createCookiesDriver()
     {
         return new CookiesDriver;
+    }
+
+    /**
+     * Create an instance of the Session mocking driver.
+     *
+     * @return \NoelDeMartin\LaravelDusk\SessionDriver
+     */
+    protected function createSessionDriver()
+    {
+        return new SessionDriver;
     }
 }

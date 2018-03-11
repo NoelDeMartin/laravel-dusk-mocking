@@ -59,6 +59,30 @@ public function testOrderShipping()
 
 Notice how the api is the same as Http tests.
 
+## Configuration
+
+Drivers serialize mocking data through requests, and cookies are used by default. The drawback is that using cookies, there is a size limit for how much information can be stored (4KB). For that reason, different drivers can be configured. Create a file named `dusk-mocking.php` inside your application config folder to change the default driver:
+
+```
+<?php
+
+return [
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Driver
+    |--------------------------------------------------------------------------
+    |
+    | This option controls the default driver for storing mock data.
+    |
+    | Supported: "cookies", "session"
+    |
+    */
+    'driver' => 'session',
+
+];
+```
+
 ## Extending
 
 Doing this, only the functionality analogous of calling `fake` is available, and not methods mocking. In order to mock custom facades or modify Laravel's default fakes, the system can be extended by using custom fakes. Those can be registered in two ways:
