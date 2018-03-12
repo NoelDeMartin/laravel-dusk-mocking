@@ -17,7 +17,7 @@ class MockingServiceProvider extends ServiceProvider
     public function boot()
     {
         Route::namespace('NoelDeMartin\LaravelDusk\Http\Controllers')
-            ->group(function() {
+            ->group(function () {
                 Route::get('/_dusk-mocking/mock', [
                     'middleware' => 'web',
                     'uses' => 'MockingController@mock',
@@ -51,7 +51,7 @@ class MockingServiceProvider extends ServiceProvider
             return new MockingManager($app);
         });
 
-        if (!$this->app->runningInConsole()) {
+        if (! $this->app->runningInConsole()) {
             foreach (Route::getMiddlewareGroups() as $group => $middlewares) {
                 Route::pushMiddlewareToGroup($group, StartMocking::class);
                 Route::pushMiddlewareToGroup($group, SaveMocking::class);

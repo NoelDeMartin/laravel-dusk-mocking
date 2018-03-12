@@ -3,8 +3,8 @@
 namespace NoelDeMartin\LaravelDusk;
 
 use Illuminate\Support\Manager;
-use NoelDeMartin\LaravelDusk\Drivers\SessionDriver;
 use NoelDeMartin\LaravelDusk\Drivers\CookiesDriver;
+use NoelDeMartin\LaravelDusk\Drivers\SessionDriver;
 
 class MockingManager extends Manager
 {

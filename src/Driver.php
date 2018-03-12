@@ -54,7 +54,7 @@ abstract class Driver
      */
     public function mock(string $facade, ...$arguments)
     {
-        if (!$this->has($facade)) {
+        if (! $this->has($facade)) {
             $mocks = $this->createMock($facade, ...$arguments);
             $facade::swap($mocks);
             $this->mocks[$facade] = $mocks;
@@ -77,7 +77,7 @@ abstract class Driver
      * Determine if a facade is being mocked.
      *
      * @param  string   $facade
-     * @return boolean
+     * @return bool
      */
     public function has(string $facade)
     {
@@ -88,7 +88,7 @@ abstract class Driver
      * Determine if a facade fake is registered.
      *
      * @param  string   $facade
-     * @return boolean
+     * @return bool
      */
     public function hasFake(string $facade)
     {
@@ -103,7 +103,7 @@ abstract class Driver
      */
     public function getFake(string $facade)
     {
-        return $this->hasFake($facade)? $this->fakes[$facade] : null;
+        return $this->hasFake($facade) ? $this->fakes[$facade] : null;
     }
 
     /**
@@ -129,12 +129,12 @@ abstract class Driver
     }
 
     /**
-    * Create a facade mock.
-    *
-    * @param $facade   string
-    * @param  mixed[]  ...$arguments
-    * @return mixed
-    */
+     * Create a facade mock.
+     *
+     * @param $facade   string
+     * @param  mixed[]  ...$arguments
+     * @return mixed
+     */
     protected function createMock(string $facade, ...$arguments)
     {
         if (isset($this->fakes[$facade])) {
@@ -151,7 +151,7 @@ abstract class Driver
      *
      * @return void
      */
-    protected abstract function load();
+    abstract protected function load();
 
     /**
      * Persists data.
@@ -159,5 +159,5 @@ abstract class Driver
      * @param  \Symfony\Component\HttpFoundation\Response   $response
      * @return void
      */
-    protected abstract function persist(Response $response);
+    abstract protected function persist(Response $response);
 }
