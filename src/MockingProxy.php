@@ -44,7 +44,7 @@ class MockingProxy
      */
     public function __call($method, $parameters)
     {
-        if (!is_null($mock = $this->getFacadeMock())) {
+        if (! is_null($mock = $this->getFacadeMock())) {
             return $mock->{$method}(...$parameters);
         } else {
             throw new Exception(
@@ -61,7 +61,7 @@ class MockingProxy
     protected function getFacadeMock()
     {
         $response = $this->browser->visit(
-            '/_dusk-mocking/serialize?facade=' . urlencode($this->facade)
+            '/_dusk-mocking/serialize?facade='.urlencode($this->facade)
         );
 
         $serializedMock = json_decode(
