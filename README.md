@@ -12,7 +12,7 @@ composer require --dev noeldemartin/laravel-dusk-mocking
 
 Add the following code to your base test case (usually `DuskTestCase`).
 
-```
+```php
 use NoelDeMartin\LaravelDusk\Browser;
 
 ...
@@ -27,7 +27,7 @@ protected function newBrowser($driver)
 
 The conceptual usage is the same as can be learned on Laravel's documentation about [mocking](https://laravel.com/docs/5.6/mocking). The only difference is that in Dusk, mocking can be set up independently on each browser instance. For that reason, instead of calling static methods we will call instance methods. Look at the following example on how to mock the Mail facade:
 
-```
+```php
 public function testOrderShipping()
 {
     $this->browse(function ($browser) use ($user) {
@@ -63,7 +63,7 @@ Notice how the api is the same as Http tests.
 
 Drivers serialize mocking data through requests, and cookies are used by default. The drawback is that using cookies, there is a size limit for how much information can be stored (4KB). For that reason, different drivers can be configured. Create a file named `dusk-mocking.php` inside your application config folder to change the default driver:
 
-```
+```php
 <?php
 
 return [
@@ -89,7 +89,7 @@ Doing this, only the functionality analogous of calling `fake` is available, and
 
 - Registered globally (every test using fakes will use them). Add the following to your base test case (usually `DuskTestCase`):
 
-```
+```php
 public function setUp()
 {
     parent::setUp();
@@ -101,7 +101,7 @@ public function setUp()
 
 - Another option is to register them only for one browser. This can be useful if it's necessary to have different fakes for multiple browsers or for aesthetic reasons (performance is not affected either way):
 
-```
+```php
 $this->browse(function (Browser $browser) {
     $browser->registerFake(Mail::class, MyMailFake::class);
 
