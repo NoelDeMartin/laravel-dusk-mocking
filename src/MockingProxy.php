@@ -70,6 +70,7 @@ class MockingProxy
             'request.onreadystatechange = function() {'.
                 'if (request.readyState == XMLHttpRequest.DONE) callback(JSON.parse(request.responseText));'.
             '};'.
+            'request.send();'
         );
 
         return is_null($serializedMock)
