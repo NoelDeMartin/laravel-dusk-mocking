@@ -114,7 +114,7 @@ abstract class Driver
      */
     public function serialize(string $facade)
     {
-        return serialize($this->mocks[$facade]);
+        return base64_encode(serialize($this->mocks[$facade]));
     }
 
     /**
@@ -125,7 +125,7 @@ abstract class Driver
      */
     public function unserialize(string $serializedMock)
     {
-        return unserialize($serializedMock);
+        return unserialize(base64_decode($serializedMock));
     }
 
     /**

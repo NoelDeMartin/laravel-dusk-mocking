@@ -64,9 +64,7 @@ class MockingProxy
             '/_dusk-mocking/serialize?facade='.urlencode($this->facade)
         );
 
-        $serializedMock = json_decode(
-            strip_tags($response->driver->getPageSource())
-        );
+        $serializedMock = strip_tags($response->driver->getPageSource());
 
         return is_null($serializedMock)
             ? null
