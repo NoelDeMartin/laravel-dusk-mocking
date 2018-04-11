@@ -47,7 +47,7 @@ class Browser extends DuskBrowser
      *
      * @param  string   $facade
      * @param  string   $fake
-     * @return NoelDeMartin\LaravelDusk\Browser
+     * @return \NoelDeMartin\LaravelDusk\Browser
      */
     public function registerFake(string $facade, $fake)
     {
