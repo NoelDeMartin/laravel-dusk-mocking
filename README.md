@@ -19,7 +19,7 @@ use NoelDeMartin\LaravelDusk\Browser;
 
 protected function newBrowser($driver)
 {
-    return new Browser($driver)
+    return new Browser($driver);
 }
 ```
 
