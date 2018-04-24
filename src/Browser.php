@@ -134,6 +134,7 @@ class Browser extends DuskBrowser
             case 'POST':
                 $token = $this->visit(URL::to('/_dusk-mocking/csrf_token'))->driver->getPageSource();
                 $token = json_decode(strip_tags($token));
+
                 return 'request.send("'.http_build_query(array_merge($params, ['_token' => $token])).'");';
         }
     }
