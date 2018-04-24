@@ -18,17 +18,22 @@ class MockingServiceProvider extends ServiceProvider
     {
         Route::namespace('NoelDeMartin\LaravelDusk\Http\Controllers')
             ->group(function () {
-                Route::get('/_dusk-mocking/mock', [
+                Route::get('/_dusk-mocking/csrf_token', [
+                    'middleware' => 'web',
+                    'uses' => 'MockingController@csrfToken',
+                ]);
+
+                Route::post('/_dusk-mocking/mock', [
                     'middleware' => 'web',
                     'uses' => 'MockingController@mock',
                 ]);
 
-                Route::get('/_dusk-mocking/register', [
+                Route::post('/_dusk-mocking/register', [
                     'middleware' => 'web',
                     'uses' => 'MockingController@register',
                 ]);
 
-                Route::get('/_dusk-mocking/serialize', [
+                Route::post('/_dusk-mocking/serialize', [
                     'middleware' => 'web',
                     'uses' => 'MockingController@serialize',
                 ]);

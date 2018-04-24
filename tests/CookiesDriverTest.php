@@ -14,7 +14,7 @@ class CookiesDriverTest extends TestCase
 
     public function test_load()
     {
-        $this->request
+        $this->prepareFacadeMock('request')
             ->shouldReceive('cookie')
             ->once()
             ->andReturnUsing(function ($key, $default) {

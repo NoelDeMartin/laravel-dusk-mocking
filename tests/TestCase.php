@@ -12,13 +12,13 @@ class TestCase extends BaseTestCase
     {
         $this->faker = Faker::create();
         $this->app = Mockery::mock(ArrayAccess::class);
-        $this->request = Mockery::mock(StdClass::class);
+        $this->facades = [];
         $this->app->shouldReceive('instance');
         $this->app
             ->shouldReceive('offsetGet')
             ->andReturnUsing(function($key) {
-                if ($key === 'request') {
-                    return $this->request;
+                if (isset($this->facades[$key])) {
+                    return $this->facades[$key];
                 }
             });
         $this->setMockingDriver();
@@ -28,6 +28,15 @@ class TestCase extends BaseTestCase
     public function tearDown()
     {
         Mockery::close();
+    }
+
+    protected function prepareFacadeMock($name)
+    {
+        if (!isset($this->facades[$name])) {
+            $this->facades[$name] = Mockery::mock(StdClass::class);
+        }
+
+        return $this->facades[$name];
     }
 
     protected function setMockingDriver($driver = 'cookies')

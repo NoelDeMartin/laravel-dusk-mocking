@@ -60,17 +60,10 @@ class MockingProxy
      */
     protected function getFacadeMock()
     {
-        $this->browser->driver->manage()->timeouts()->setScriptTimeout(1);
-
-        $serializedMock = $this->browser->driver->executeAsyncScript(
-            'var callback = arguments[0];'.
-            'var request = new XMLHttpRequest();'.
-            'request.open("GET", "/_dusk-mocking/serialize?facade='.urlencode($this->facade).'", true);'.
-            'request.withCredentials = true;'.
-            'request.onreadystatechange = function() {'.
-                'if (request.readyState == XMLHttpRequest.DONE) callback(JSON.parse(request.responseText));'.
-            '};'.
-            'request.send();'
+        $serializedMock = $this->browser->executeJavascriptRequest(
+            'POST',
+            '/_dusk-mocking/serialize',
+            [ 'facade' => $this->facade ]
         );
 
         return is_null($serializedMock)

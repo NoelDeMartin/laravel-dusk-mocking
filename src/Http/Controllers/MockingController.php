@@ -7,6 +7,16 @@ use NoelDeMartin\LaravelDusk\Facades\Mocking;
 class MockingController
 {
     /**
+     * Get csrf token.
+     *
+     * @return void
+     */
+    public function csrfToken()
+    {
+        return response()->json(csrf_token());
+    }
+
+    /**
      * Setup a facade mock.
      *
      * @return void
