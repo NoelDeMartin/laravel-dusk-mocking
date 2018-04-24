@@ -63,7 +63,7 @@ class MockingProxy
         $serializedMock = $this->browser->executeJavascriptRequest(
             'POST',
             '/_dusk-mocking/serialize',
-            [ 'facade' => $this->facade ]
+            ['facade' => $this->facade]
         );
 
         return is_null($serializedMock)

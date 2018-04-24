@@ -3,7 +3,6 @@
 namespace NoelDeMartin\LaravelDusk;
 
 use Illuminate\Support\Facades\URL;
-use Facebook\WebDriver\WebDriverBy;
 use Laravel\Dusk\Browser as DuskBrowser;
 use NoelDeMartin\LaravelDusk\Facades\Mocking;
 use NoelDeMartin\LaravelDusk\Exceptions\BrowserJavascriptRequestError;
@@ -75,8 +74,8 @@ class Browser extends DuskBrowser
      * @param  string   $method
      * @param  array    $url
      * @param  array    $params
-     * @param  boolean  $useSession
-     * @param  boolean  $responseType
+     * @param  bool     $useSession
+     * @param  bool     $responseType
      * @return array
      */
     public function executeJavascriptRequest($method, $url, $params = [], $useSession = true)
