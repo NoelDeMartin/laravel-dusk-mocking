@@ -119,9 +119,9 @@ class Browser extends DuskBrowser
     {
         switch ($method) {
             case 'GET':
-                return 'request.open("GET", "'.$url.'?'.http_build_query($params).'", true);';
+                return 'request.open("GET", "'. rtrim(self::$baseUrl, '/') . $url.'?'.http_build_query($params).'", true);';
             case 'POST':
-                return 'request.open("POST", "'.$url.'", true);'.
+                return 'request.open("POST", "'. rtrim(self::$baseUrl, '/') . $url.'", true);'.
                     'request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");';
         }
     }
@@ -132,7 +132,7 @@ class Browser extends DuskBrowser
             case 'GET':
                 return 'request.send();';
             case 'POST':
-                $token = $this->visit(URL::to('/_dusk-mocking/csrf_token'))->driver->getPageSource();
+                $token = $this->visit(URL::to(rtrim(self::$baseUrl, '/') . '/_dusk-mocking/csrf_token'))->driver->getPageSource();
                 $token = json_decode(strip_tags($token));
 
                 return 'request.send("'.http_build_query(array_merge($params, ['_token' => $token])).'");';
