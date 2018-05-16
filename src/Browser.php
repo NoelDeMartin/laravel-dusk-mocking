@@ -2,6 +2,7 @@
 
 namespace NoelDeMartin\LaravelDusk;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
 use Laravel\Dusk\Browser as DuskBrowser;
 use NoelDeMartin\LaravelDusk\Facades\Mocking;
@@ -103,7 +104,7 @@ class Browser extends DuskBrowser
             $this->buildJavascriptSendRequestScript($method, $params)
         );
 
-        if (is_string($result) && starts_with($result, 'error:')) {
+        if (is_string($result) && Str::startsWith($result, 'error:')) {
             throw new BrowserJavascriptRequestError(substr($result, 6));
         }
 
@@ -117,11 +118,15 @@ class Browser extends DuskBrowser
 
     private function buildJavascriptOpenRequestScript($method, $url, $params)
     {
+        if (! Str::startsWith($url, ['http://', 'https://'])) {
+            $url = static::$baseUrl.'/'.ltrim($url, '/');
+        }
+
         switch ($method) {
             case 'GET':
-                return 'request.open("GET", "'. rtrim(self::$baseUrl, '/') . $url.'?'.http_build_query($params).'", true);';
+                return 'request.open("GET", "'.$url.'?'.http_build_query($params).'", true);';
             case 'POST':
-                return 'request.open("POST", "'. rtrim(self::$baseUrl, '/') . $url.'", true);'.
+                return 'request.open("POST", "'.$url.'", true);'.
                     'request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");';
         }
     }
@@ -132,7 +137,7 @@ class Browser extends DuskBrowser
             case 'GET':
                 return 'request.send();';
             case 'POST':
-                $token = $this->visit(URL::to(rtrim(self::$baseUrl, '/') . '/_dusk-mocking/csrf_token'))->driver->getPageSource();
+                $token = $this->visit(URL::to('/_dusk-mocking/csrf_token'))->driver->getPageSource();
                 $token = json_decode(strip_tags($token));
 
                 return 'request.send("'.http_build_query(array_merge($params, ['_token' => $token])).'");';
