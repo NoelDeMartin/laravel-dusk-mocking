@@ -2,8 +2,8 @@
 
 namespace NoelDeMartin\LaravelDusk\Fakes;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\App;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Config;
 
 class StorageFake

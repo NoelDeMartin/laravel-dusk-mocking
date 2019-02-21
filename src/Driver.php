@@ -2,10 +2,8 @@
 
 namespace NoelDeMartin\LaravelDusk;
 
-use Symfony\Component\HttpFoundation\Response;
-
 use Illuminate\Support\Facades\Storage;
-
+use Symfony\Component\HttpFoundation\Response;
 use NoelDeMartin\LaravelDusk\Fakes\StorageFake;
 
 abstract class Driver
@@ -160,7 +158,7 @@ abstract class Driver
     {
         if (isset($this->fakes[$facade])) {
             return new $this->fakes[$facade](...$arguments);
-        } else if ($facade === Storage::class) {
+        } elseif ($facade === Storage::class) {
             $storageFake = $this->getStorageFake();
 
             $storageFake->fake(...$arguments);
