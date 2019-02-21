@@ -1,8 +1,14 @@
 <?php
 
-use Illuminate\Support\Facades\Cookie;
-use NoelDeMartin\LaravelDusk\Facades\Mocking;
+namespace Testing;
+
+use Mockery;
+
 use Symfony\Component\HttpFoundation\Response;
+
+use Illuminate\Support\Facades\Cookie;
+
+use NoelDeMartin\LaravelDusk\Facades\Mocking;
 
 class CookiesDriverTest extends TestCase
 {

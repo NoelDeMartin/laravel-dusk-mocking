@@ -1,6 +1,12 @@
 <?php
 
+namespace Testing;
+
+use Mockery;
+
 use NoelDeMartin\LaravelDusk\Browser;
+
+use Illuminate\Support\Facades\Storage;
 
 class BrowserTest extends TestCase
 {

@@ -4,6 +4,10 @@ namespace NoelDeMartin\LaravelDusk;
 
 use Symfony\Component\HttpFoundation\Response;
 
+use Illuminate\Support\Facades\Storage;
+
+use NoelDeMartin\LaravelDusk\Fakes\StorageFake;
+
 abstract class Driver
 {
     /**
@@ -19,6 +23,14 @@ abstract class Driver
      * @var array
      */
     protected $fakes = [];
+
+    /**
+     * Storage fake must remain the same instance because it can
+     * be faked more than once (when testing multiple disks).
+     *
+     * @var NoelDeMartin\LaravelDusk\Fakes\StorageFake|null
+     */
+    protected $storageFake = null;
 
     /**
      * Start mocking facades.
@@ -54,11 +66,9 @@ abstract class Driver
      */
     public function mock(string $facade, ...$arguments)
     {
-        if (! $this->has($facade)) {
-            $mocks = $this->createMock($facade, ...$arguments);
-            $facade::swap($mocks);
-            $this->mocks[$facade] = $mocks;
-        }
+        $mocks = $this->createMock($facade, ...$arguments);
+        $facade::swap($mocks);
+        $this->mocks[$facade] = $mocks;
     }
 
     /**
@@ -82,6 +92,17 @@ abstract class Driver
     public function has(string $facade)
     {
         return isset($this->mocks[$facade]);
+    }
+
+    /**
+     * Get facade mock.
+     *
+     * @param  string   $facade
+     * @return mixed
+     */
+    public function get(string $facade)
+    {
+        return $this->has($facade) ? $this->mocks[$facade] : null;
     }
 
     /**
@@ -139,11 +160,31 @@ abstract class Driver
     {
         if (isset($this->fakes[$facade])) {
             return new $this->fakes[$facade](...$arguments);
+        } else if ($facade === Storage::class) {
+            $storageFake = $this->getStorageFake();
+
+            $storageFake->fake(...$arguments);
+
+            return $storageFake;
         } else {
             $facade::fake(...$arguments);
 
             return $facade::getFacadeRoot();
         }
+    }
+
+    /**
+     * Lazy-load the storage fake.
+     *
+     * @return NoelDeMartin\LaravelDusk\Fakes\StorageFake
+     */
+    protected function getStorageFake()
+    {
+        if (is_null($this->storageFake)) {
+            $this->storageFake = new StorageFake;
+        }
+
+        return $this->storageFake;
     }
 
     /**
