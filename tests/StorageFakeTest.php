@@ -82,4 +82,23 @@ class StorageFakeTest extends TestCase
 
         $storageFake->disk($disk)->put($filename, $fileContents);
     }
+
+    public function test_serializes_without_disks()
+    {
+        $disk = $this->faker->word;
+
+        $storageFake = new StorageFake();
+
+        $storageFake->fake($disk);
+
+        // This would fail if disks are serialized because a Mock is not serializable
+        $storageFake = unserialize(serialize($storageFake));
+
+        $filename = $this->faker->word;
+        $fileContents = str_random();
+
+        $this->filesystemMock->shouldReceive('put')->with($filename, $fileContents)->once();
+
+        $storageFake->disk($disk)->put($filename, $fileContents);
+    }
 }

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Config;
 
 class StorageFake
 {
+    protected $diskRoots = [];
     protected $disks = [];
 
     /**
@@ -25,6 +26,7 @@ class StorageFake
             $root = storage_path('framework/testing/disks/'.$disk)
         );
 
+        $this->diskRoots[$disk] = $root;
         $this->disks[$disk] = App::make('filesystem')->createLocalDriver(['root' => $root]);
     }
 
@@ -63,5 +65,27 @@ class StorageFake
     public function __call($method, $parameters)
     {
         return $this->disk()->$method(...$parameters);
+    }
+
+    /**
+     * Prepare object for serialization.
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        return ['diskRoots'];
+    }
+
+    /**
+     * Restore object after deserialization.
+     *
+     * @return void
+     */
+    public function __wakeup()
+    {
+        foreach ($this->diskRoots as $disk => $root) {
+            $this->disks[$disk] = App::make('filesystem')->createLocalDriver(['root' => $root]);
+        }
     }
 }
