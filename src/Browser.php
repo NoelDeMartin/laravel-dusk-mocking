@@ -11,6 +11,13 @@ use NoelDeMartin\LaravelDusk\Exceptions\BrowserJavascriptRequestError;
 class Browser extends DuskBrowser
 {
     /**
+     * Javascript requests timeout in seconds.
+     *
+     * @var int
+     */
+    public static $javascriptRequestsTimeout = 1;
+
+    /**
      * Mock a facade and return the mock proxy.
      *
      * @param  string   $facade
@@ -81,7 +88,7 @@ class Browser extends DuskBrowser
      */
     public function executeJavascriptRequest($method, $url, $params = [], $useSession = true)
     {
-        $this->driver->manage()->timeouts()->setScriptTimeout(1);
+        $this->driver->manage()->timeouts()->setScriptTimeout(static::$javascriptRequestsTimeout);
 
         $result = $this->driver->executeAsyncScript(
             'var callback = arguments[0];'.

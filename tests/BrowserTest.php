@@ -36,6 +36,18 @@ class BrowserTest extends TestCase
         $browser->mock($facade, ...$args);
     }
 
+    public function test_default_javascript_requests_timeout_can_be_overridden()
+    {
+        Browser::$javascriptRequestsTimeout = 5;
+
+        $driver = Mockery::mock(StdClass::class);
+        $driver->shouldReceive('executeAsyncScript');
+        $driver->shouldReceive('manage->timeouts->setScriptTimeout')->with(5);
+        $browser = new Browser($driver);
+
+        $browser->executeJavascriptRequest('GET', 'https://example.com');
+    }
+
     public function test_register()
     {
         $facade = $this->faker->word;

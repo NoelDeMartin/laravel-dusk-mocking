@@ -83,6 +83,19 @@ return [
 ];
 ```
 
+### Script timeout
+
+As explained [below](#how-does-it-work), each test may send multiple requests to the application to serialize/deserialize fakes. In order to prevent changing the state of the browser, this is done using javascript XHR requests. These requests will timeout in 1 second by default, but this can be configured using the `$javascriptRequestsTimeout` variable:
+
+```php
+protected function newBrowser($driver)
+{
+    Browser::$javascriptRequestsTimeout = 5;
+
+    return new Browser($driver);
+}
+```
+
 ## Extending
 
 Doing this, only the functionality analogous of calling `fake` is available, and not methods mocking. In order to mock custom facades or modify Laravel's default fakes, the system can be extended by using custom fakes. Those can be registered in two ways:
