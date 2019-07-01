@@ -2,13 +2,11 @@
 
 namespace NoelDeMartin\LaravelDusk;
 
-use Symfony\Component\HttpFoundation\Response;
-
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-
 use NoelDeMartin\LaravelDusk\Fakes\EventFake;
+use Symfony\Component\HttpFoundation\Response;
 use NoelDeMartin\LaravelDusk\Fakes\StorageFake;
 
 abstract class Driver
@@ -79,7 +77,7 @@ abstract class Driver
         $facade::swap($mock);
         $this->mocks[$facade] = $mock;
 
-        switch($facade) {
+        switch ($facade) {
             case Event::class:
                 Model::setEventDispatcher($mock);
                 break;
