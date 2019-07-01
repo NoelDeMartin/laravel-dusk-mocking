@@ -6,8 +6,6 @@ use Mockery;
 
 use NoelDeMartin\LaravelDusk\Browser;
 
-use Illuminate\Support\Facades\Storage;
-
 class BrowserTest extends TestCase
 {
     public function test_fake()

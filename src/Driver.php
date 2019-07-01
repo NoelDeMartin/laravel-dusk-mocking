@@ -2,8 +2,13 @@
 
 namespace NoelDeMartin\LaravelDusk;
 
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Storage;
+
+use NoelDeMartin\LaravelDusk\Fakes\EventFake;
 use NoelDeMartin\LaravelDusk\Fakes\StorageFake;
 
 abstract class Driver
@@ -41,6 +46,12 @@ abstract class Driver
 
         foreach ($this->mocks as $facade => $mock) {
             $facade::swap($mock);
+
+            switch ($facade) {
+                case Event::class:
+                    Model::setEventDispatcher($mock);
+                    break;
+            }
         }
     }
 
@@ -64,9 +75,15 @@ abstract class Driver
      */
     public function mock(string $facade, ...$arguments)
     {
-        $mocks = $this->createMock($facade, ...$arguments);
-        $facade::swap($mocks);
-        $this->mocks[$facade] = $mocks;
+        $mock = $this->createMock($facade, ...$arguments);
+        $facade::swap($mock);
+        $this->mocks[$facade] = $mock;
+
+        switch($facade) {
+            case Event::class:
+                Model::setEventDispatcher($mock);
+                break;
+        }
     }
 
     /**
@@ -158,16 +175,21 @@ abstract class Driver
     {
         if (isset($this->fakes[$facade])) {
             return new $this->fakes[$facade](...$arguments);
-        } elseif ($facade === Storage::class) {
-            $storageFake = $this->getStorageFake();
+        }
 
-            $storageFake->fake(...$arguments);
+        switch ($facade) {
+            case Storage::class:
+                $storageFake = $this->getStorageFake();
 
-            return $storageFake;
-        } else {
-            $facade::fake(...$arguments);
+                $storageFake->fake(...$arguments);
 
-            return $facade::getFacadeRoot();
+                return $storageFake;
+            case Event::class:
+                return new EventFake($facade::getFacadeRoot(), ...$arguments);
+            default:
+                $facade::fake(...$arguments);
+
+                return $facade::getFacadeRoot();
         }
     }
 

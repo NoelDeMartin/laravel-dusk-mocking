@@ -4,12 +4,12 @@ namespace Testing;
 
 use Mockery;
 
-use Symfony\Component\HttpFoundation\Response;
-
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
+use NoelDeMartin\LaravelDusk\Fakes\EventFake;
 use NoelDeMartin\LaravelDusk\Fakes\StorageFake;
 
 use Testing\Stubs\StubDriver;
@@ -59,5 +59,20 @@ class DriverTest extends TestCase
         $storageFake = $driver->get(Storage::class);
         $this->assertTrue($storageFake->isFaking($firstDisk));
         $this->assertTrue($storageFake->isFaking($secondDisk));
+    }
+
+    public function test_fake_event()
+    {
+        $dispatcherMock = Mockery::mock(Dispatcher::class);
+
+        Event::swap($dispatcherMock);
+
+        $driver = new StubDriver;
+        $driver->mock(Event::class);
+
+        $this->assertTrue($driver->has(Event::class));
+
+        $eventFake = $driver->get(Event::class);
+        $this->assertInstanceOf(EventFake::class, $eventFake);
     }
 }

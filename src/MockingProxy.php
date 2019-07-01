@@ -66,7 +66,7 @@ class MockingProxy
             ['facade' => $this->facade]
         );
 
-        return is_null($serializedMock)
+        return empty($serializedMock)
             ? null
             : Mocking::unserialize($serializedMock);
     }
