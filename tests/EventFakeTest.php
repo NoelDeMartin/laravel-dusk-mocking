@@ -14,7 +14,7 @@ class EventFakeTest extends TestCase
 {
     private $dispatcherMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

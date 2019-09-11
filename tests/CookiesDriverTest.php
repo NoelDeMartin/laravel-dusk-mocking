@@ -12,7 +12,7 @@ use NoelDeMartin\LaravelDusk\Facades\Mocking;
 
 class CookiesDriverTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->setMockingDriver('cookies');

@@ -5,9 +5,8 @@ namespace Testing;
 use Mockery;
 
 use Illuminate\Contracts\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
-use NoelDeMartin\LaravelDusk\Facades\Mocking;
 use NoelDeMartin\LaravelDusk\Fakes\StorageFake;
 
 class StorageFakeTest extends TestCase
@@ -15,7 +14,7 @@ class StorageFakeTest extends TestCase
     private $filesystemMock;
     private $filesystemManagerMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -37,7 +36,7 @@ class StorageFakeTest extends TestCase
         $storageFake->fake($disk);
 
         $filename = $this->faker->word;
-        $fileContents = str_random();
+        $fileContents = Str::random();
 
         $this->filesystemMock->shouldReceive('put')->with($filename, $fileContents)->once();
 
@@ -58,7 +57,7 @@ class StorageFakeTest extends TestCase
         $storageFake->fake();
 
         $filename = $this->faker->word;
-        $fileContents = str_random();
+        $fileContents = Str::random();
 
         $this->filesystemMock->shouldReceive('put')->with($filename, $fileContents)->once();
 
@@ -72,7 +71,7 @@ class StorageFakeTest extends TestCase
         $storageFake = new StorageFake();
 
         $filename = $this->faker->word;
-        $fileContents = str_random();
+        $fileContents = Str::random();
 
         $this->filesystemMock->shouldReceive('put')->with($filename, $fileContents)->once();
         $this->filesystemManagerMock
@@ -95,7 +94,7 @@ class StorageFakeTest extends TestCase
         $storageFake = unserialize(serialize($storageFake));
 
         $filename = $this->faker->word;
-        $fileContents = str_random();
+        $fileContents = Str::random();
 
         $this->filesystemMock->shouldReceive('put')->with($filename, $fileContents)->once();
 

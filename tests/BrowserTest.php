@@ -4,6 +4,8 @@ namespace Testing;
 
 use Mockery;
 
+use Illuminate\Support\Str;
+
 use NoelDeMartin\LaravelDusk\Browser;
 
 class BrowserTest extends TestCase
@@ -17,9 +19,9 @@ class BrowserTest extends TestCase
             ->shouldReceive('executeAsyncScript')
             ->with(
                 Mockery::on(function ($argument) use ($facade, $args) {
-                    return str_contains($argument, '/_dusk-mocking/mock')
-                        && str_contains($argument, 'facade='.urlencode($facade))
-                        && str_contains($argument, 'arguments='.urlencode(json_encode($args)));
+                    return Str::contains($argument, '/_dusk-mocking/mock')
+                        && Str::contains($argument, 'facade='.urlencode($facade))
+                        && Str::contains($argument, 'arguments='.urlencode(json_encode($args)));
                 })
             )
             ->twice();
@@ -55,9 +57,9 @@ class BrowserTest extends TestCase
             ->shouldReceive('executeAsyncScript')
             ->with(
                 Mockery::on(function ($argument) use ($facade, $fake) {
-                    return str_contains($argument, '/_dusk-mocking/register')
-                        && str_contains($argument, 'facade='.urlencode($facade))
-                        && str_contains($argument, 'fake='.urlencode($fake));
+                    return Str::contains($argument, '/_dusk-mocking/register')
+                        && Str::contains($argument, 'facade='.urlencode($facade))
+                        && Str::contains($argument, 'fake='.urlencode($fake));
                 })
             )
             ->once();

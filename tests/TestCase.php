@@ -16,7 +16,7 @@ use NoelDeMartin\LaravelDusk\MockingManager;
 
 class TestCase extends BaseTestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         $this->faker = Faker::create();
         $this->app = Mockery::mock(Container::class);
@@ -39,7 +39,7 @@ class TestCase extends BaseTestCase
         Facade::setFacadeApplication($this->app);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
         Facade::clearResolvedInstances();
