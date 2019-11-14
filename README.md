@@ -1,6 +1,8 @@
-# Laravel Dusk Mocking [![Build Status](https://travis-ci.org/NoelDeMartin/laravel-dusk-mocking.svg?branch=master)](https://travis-ci.org/NoelDeMartin/laravel-dusk-mocking) [![StyleCI](https://styleci.io/repos/122357103/shield?branch=master)](https://styleci.io/repos/122357103)
+# Laravel Dusk Mocking [![Build Status](https://travis-ci.org/NoelDeMartin/laravel-dusk-mocking.svg?branch=master)](https://travis-ci.org/NoelDeMartin/laravel-dusk-mocking)
 
 When running browser tests with Laravel Dusk, [it is not possible](https://github.com/laravel/dusk/issues/152) to mock facades like [it is usually done](https://laravel.com/docs/mocking) for http tests. This package aims to provide that functionality. However, it does so by doing some workarounds. It is recommended to read the [Disclaimer](#disclaimer) and [How does it work?](#how-does-it-work) sections on this readme before using it.
+
+Before adding it to your project, you can also give it a try with a bare-bones Laravel application prepared with tests running on a CI environment here: [laravel-dusk-mocking-sandbox](https://github.com/NoelDeMartin/laravel-dusk-mocking-sandbox/).
 
 # Installation
 
