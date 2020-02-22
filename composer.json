@@ -35,5 +35,8 @@
                 "NoelDeMartin\\LaravelDusk\\MockingServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
     }
 }
