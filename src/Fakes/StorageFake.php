@@ -2,11 +2,12 @@
 
 namespace NoelDeMartin\LaravelDusk\Fakes;
 
+use Illuminate\Contracts\Filesystem\Factory;
 use Illuminate\Support\Facades\App;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Config;
 
-class StorageFake
+class StorageFake implements Factory
 {
     protected $diskRoots = [];
     protected $disks = [];
