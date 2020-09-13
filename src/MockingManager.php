@@ -15,7 +15,7 @@ class MockingManager extends Manager
      */
     public function getDefaultDriver()
     {
-        $config = $this->app['config'];
+        $config = $this->container['config'];
 
         return $config->has('dusk-mocking')
             ? $config['dusk-mocking.driver']
