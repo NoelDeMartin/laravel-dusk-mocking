@@ -2,6 +2,8 @@
 
 namespace NoelDeMartin\LaravelDusk;
 
+use Exception;
+
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use NoelDeMartin\LaravelDusk\Http\Middleware\SaveMocking;
