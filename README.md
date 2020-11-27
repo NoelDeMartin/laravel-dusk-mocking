@@ -1,6 +1,6 @@
 # Laravel Dusk Mocking [![Build Status](https://travis-ci.org/NoelDeMartin/laravel-dusk-mocking.svg?branch=master)](https://travis-ci.org/NoelDeMartin/laravel-dusk-mocking) [![Github Actions Status](https://github.com/noeldemartin/laravel-dusk-mocking/workflows/Testing/badge.svg)](https://github.com/noeldemartin/laravel-dusk-mocking/actions)
 
-When running browser tests with Laravel Dusk, [it is not possible](https://github.com/laravel/dusk/issues/152) to mock facades like [it is usually done](https://laravel.com/docs/mocking) for http tests. This package aims to provide that functionality. However, it does so by doing some workarounds. It is recommended to read the [Disclaimer](#disclaimer) and [How does it work?](#how-does-it-work) sections on this readme before using it.
+When running browser tests with Laravel Dusk, [it is not possible](https://github.com/laravel/dusk/issues/152) to mock facades like [it is usually done](https://laravel.com/docs/mocking) for http tests. This package aims to provide that functionality. However, it does so by doing some workarounds. It is recommended to read the [Disclaimer](#disclaimer) (and in particular the [Limitations](#limitations)) before using it.
 
 Before adding it to your project, you can also give it a try with a bare-bones Laravel application prepared with tests running on a CI environment here: [laravel-dusk-mocking-sandbox](https://github.com/NoelDeMartin/laravel-dusk-mocking-sandbox/).
 
@@ -130,12 +130,22 @@ In order to understand how to implement these Fake classes, you can take a look 
 
 # Disclaimer
 
-Most scenarios should be covered with http tests, since they both run faster and are more reliable when testing your code. The same could be said when testing your frontend and Javascript, there are multiple frameworks specific for that. However, there is definetly some value on using Dusk for integration & end to end tests. For those scenarios it's rarely necessary to mock any facades. But if you do find yourself in that situation, this package can help you :smiley:.
+Most scenarios should be covered with http tests, since they both run faster and are more reliable when testing your code. The same could be said when testing your frontend and Javascript, there are multiple frameworks specific for that. However, there is definitely some value on using Dusk for integration & end to end tests. For those scenarios it's rarely necessary to mock any facades. But if you do find yourself in that situation, this package can help you :smiley:.
 
-# How does it work?
+## How does it work?
 
-The reason why mocking cannot be done like in normal http tests is because when Dusk runs a test it's really doing an actual request to a different process (running for example on chromedriver). Server and client don't share the same runtime, and that's why it isn't possible to have code communicate between them. Knowing this, how does this package work? Well, Dusk is already achieving something similar to this when using authentication. Some special routes (as a convention starting with `_dusk`) are created to provide communication with the server process, and state is persisted in the session like it would with a normal Laravel session. Given this and other uses, different drivers can be configured for tests (in your `.env.dusk` or `phpunit.dusk.xml` files). By using a separate session driver such as a testing database, it can be wiped out before and after each test to guarantee a real black-box scenario.
+The reason why mocking cannot be done like in normal http tests is because when Dusk runs a test it's really doing an actual request using a browser (running for example on chromedriver). Server and client don't share the same runtime, and that's why it isn't possible to have code communicate between them. Knowing this, how does this package work? Well, Dusk is already achieving something similar to this when using authentication. Some special routes (as a convention starting with `_dusk`) are created to provide communication with the server process, and state is persisted in the session like it would with a normal Laravel session. Given this and other uses, different drivers can be configured for tests (in your `.env.dusk` or `phpunit.dusk.xml` files). By using a separate session driver such as a testing database, it can be wiped out before and after each test to guarantee a real black-box scenario.
 
 In a nutshell, what happens under the hood is that Facades are replaced using the [`swap`](https://laravel.com/api/5.6/Illuminate/Support/Facades/Facade.html#method_swap) method at the beginning of every request, and they'll be serialized at the end. When calling assertions methods from test code, data will be deserialized into the test runtime and assertions executed as usual.
 
 You can learn more about how this works looking at [MockingProxy](src/MockingProxy.php), [Driver](src/Driver.php) and [MockingServiceProvider](src/MockingServiceProvider.php) classes.
+
+## Limitations
+
+The serialization/deserialization of mocked services is implemented using php's [serialize](https://www.php.net/manual/en/function.serialize.php) and [unserialize](https://www.php.net/manual/en/function.unserialize.php) functions. One limitation that this ensues is that closures can't be serialized. If you see an error saying `Serialization of 'Closure' is not allowed`, that means somewhere inside a service you're faking, there is a closure.
+
+There is a couple of things you could do to work around this limitation.
+
+If you have control over the service, you could use the [SerializableClosure](https://github.com/opis/closure) class to make your closures serializable (Laravel core is already doing this [in multiple places](https://github.com/laravel/framework/search?q=SerializableClosure)).
+
+If you're trying to mock a 3rd party service you don't have control over, you could implement a service fake yourself instead of using the built-in class. This library [already does it](src/Fakes/) with some common Laravel services, but it doesn't cover the complete Laravel api. You can register your custom fakes using [the extending functionality](#extending). Although this may seem a daunting task, keep in mind that you only need to implement fakes for the functionality you're testing using this package. And as we discussed at the start of this section, that shouldn't be a lot.
