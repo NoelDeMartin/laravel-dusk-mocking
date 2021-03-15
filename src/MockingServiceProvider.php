@@ -40,6 +40,13 @@ class MockingServiceProvider extends ServiceProvider
                     'uses' => 'MockingController@serialize',
                 ]);
             });
+        
+        if (! $this->app->runningInConsole()) {
+            foreach (Route::getMiddlewareGroups() as $group => $middlewares) {
+                Route::pushMiddlewareToGroup($group, StartMocking::class);
+                Route::pushMiddlewareToGroup($group, SaveMocking::class);
+            }
+        }
     }
 
     /**
@@ -57,12 +64,5 @@ class MockingServiceProvider extends ServiceProvider
         $this->app->singleton('dusk-mocking', function ($app) {
             return new MockingManager($app);
         });
-
-        if (! $this->app->runningInConsole()) {
-            foreach (Route::getMiddlewareGroups() as $group => $middlewares) {
-                Route::pushMiddlewareToGroup($group, StartMocking::class);
-                Route::pushMiddlewareToGroup($group, SaveMocking::class);
-            }
-        }
     }
 }
