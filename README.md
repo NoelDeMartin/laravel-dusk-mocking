@@ -1,5 +1,8 @@
 # Laravel Dusk Mocking [![Build Status](https://travis-ci.org/NoelDeMartin/laravel-dusk-mocking.svg?branch=master)](https://travis-ci.org/NoelDeMartin/laravel-dusk-mocking) [![Github Actions Status](https://github.com/noeldemartin/laravel-dusk-mocking/workflows/Testing/badge.svg)](https://github.com/noeldemartin/laravel-dusk-mocking/actions)
 
+> [!WARNING]  
+> This package is not necessary anymore, given that [Pest added support for browser tests with mocking in v4](https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing#content-pest-v4-is-here-now-with-browser-testing).
+
 When running browser tests with Laravel Dusk, [it is not possible](https://github.com/laravel/dusk/issues/152) to mock facades like [it is usually done](https://laravel.com/docs/mocking) for http tests. This package aims to provide that functionality. However, it does so by doing some workarounds. It is recommended to read the [Disclaimer](#disclaimer) (and in particular the [Limitations](#limitations)) before using it.
 
 Before adding it to your project, you can also give it a try with a bare-bones Laravel application prepared with tests running on a CI environment here: [laravel-dusk-mocking-sandbox](https://github.com/NoelDeMartin/laravel-dusk-mocking-sandbox/).
