@@ -2,6 +2,8 @@
 
 > [!WARNING]  
 > This package is not necessary anymore, given that [Pest added support for browser tests with mocking in v4](https://pestphp.com/docs/pest-v4-is-here-now-with-browser-testing#content-pest-v4-is-here-now-with-browser-testing).
+> 
+> Still, if you haven't migrated to Pest yet (or you don't want to), you should be able to keep using this package, but keep in mind that it's not in active development. Feel free to [contact me](https://noeldemartin.com) if you *really* need some help. You can also use [vendor-patches](https://github.com/symplify/vendor-patches) to apply any changes that you need.
 
 When running browser tests with Laravel Dusk, [it is not possible](https://github.com/laravel/dusk/issues/152) to mock facades like [it is usually done](https://laravel.com/docs/mocking) for http tests. This package aims to provide that functionality. However, it does so by doing some workarounds. It is recommended to read the [Disclaimer](#disclaimer) (and in particular the [Limitations](#limitations)) before using it.
 
